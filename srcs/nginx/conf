@@ -1,0 +1,11 @@
+server {
+        listen 443 default_server;
+        listen [::]:443 default_server;
+
+        root /srv/www/;
+        server_name $(NGINX_HOST);
+
+        location /files {
+                autoindex on;
+        }
+}
