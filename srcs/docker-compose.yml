@@ -1,0 +1,10 @@
+nginx:
+  image:  /nginx/Dockerfile
+  ports:  "443:443"
+
+mariadb:
+  image:  /nginx/Dockerfile
+  volumes: /data
+
+wordpress:
+  image:  /nginx/Dockerfile
