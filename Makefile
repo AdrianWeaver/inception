@@ -9,7 +9,7 @@ SRC_WORDPRESS = srcs/wordpress/Dockerfile
 all:	compose
 
 compose: $(NGINX) $(MARIADB) $(WORDPRESS) $(RUN)
-	docker-compose -p inception -f srcs/docker-compose.yml	
+	docker-compose up -p inception -f srcs/docker-compose.yml	
 	
 
 $(RUN):

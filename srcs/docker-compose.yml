@@ -1,10 +1,19 @@
-nginx:
-  image:  /nginx/Dockerfile
-  ports:  "443:443"
+services:
+  nginx:
+    build:  /nginx/Dockerfile
+    ports:  "443:443"
+    restart:  on_failure
 
-mariadb:
-  image:  /nginx/Dockerfile
-  volumes: /data
+  mariadb:
+    build:  /nginx/Dockerfile
+    volumes: mariadb_data:/data/db
+    restart: on_failure
+    depends_on: nginx
 
-wordpress:
-  image:  /nginx/Dockerfile
+  wordpress:
+    build:  /nginx/Dockerfile
+    volumes:  wordpress_data:/data/wordpress
+    restart:  on_failure
+    depends_on:
+      - nginx
+      - mariadb
