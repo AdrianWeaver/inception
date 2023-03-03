@@ -6,13 +6,13 @@ services:
 
   mariadb:
     build:  /nginx/Dockerfile
-    volumes: mariadb_data:/data/db
+    volumes: mariadb_data:/home/aweaver/data/mariadb
     restart: on_failure
     depends_on: nginx
 
   wordpress:
     build:  /nginx/Dockerfile
-    volumes:  wordpress_data:/data/wordpress
+    volumes:  wordpress_data:/home/aweaver/data/wordpress
     restart:  on_failure
     depends_on:
       - nginx
