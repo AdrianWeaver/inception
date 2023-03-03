@@ -1,33 +1,21 @@
 FROM alpine:3.17.1
 
+ENTRYPOINT ["./init_database.sh"]
 
-RUN apk add mariadb\
+RUN apk -U upgrade \
+&& apk add mariadb\
 && apk add mariadb-client\
-&& mariadb-install-db --user=mysql --datadir=/var/lib/mysql --auth-root-authentication-method=normal\
 && mkdir -p /run/mysqld\
 && chown -R mysql:mysql /run/mysqld
 
 COPY mariadb.conf /etc/my.cnf.d/mariadb-server.cnf
 
-RUN mysqld& \
-sleep 5 \
-&& mysql -e "DROP DATABASE test;"\
-&& mysql -e "CREATE DATABASE aweaver"\
-&& mysql -e "CREATE USER 'staf'@'%' IDENTIFIED BY 'newpassword';"\
-&& mysql -e "SET PASSWORD FOR 'staf'@'%' = PASSWORD('newpassword');"
-RUN sleep 10 
-RUN mysql -e "GRANT ALL PRIVILEGES ON aweaver TO 'staf'@'%' IDENTIFIED BY 'newpassword';"\
-&& mysql -e "CREATE USER 'otheraccount'@'%';"\
-&& mysql -e "SET PASSWORD FOR 'otheraccount'@'%' = PASSWORD('othernewpassword');"\
-&& mysql -e "SET PASSWORD FOR 'root'@'%' = PASSWORD('newpassword');"\
-&& mysql -e "FLUSH PRIVILEGES;"
+RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
-CMD ["/bin/ash"]
+COPY mariadb.conf /etc/my.cnf.d/mariadb-server.cnf
+COPY init_database.sh init_database.sh
 
-# need to replace aweaver by $(MYSQL_DATABASE_NAME)
-# need to replace staf by $(MYSQL_ADMIN_LOGIN)
-# need to replace newpassword by $(MYSQL_ADMIN_PASSWD)
-# need to replace otheraccount by $(MYSQL_USER_LOGIN)
-# need to replace othernewpassword by $(MYSQL_USER2_PASSWD)
+RUN chmod 755 init_database.sh
 
+CMD ["./init_database.sh"]
 
