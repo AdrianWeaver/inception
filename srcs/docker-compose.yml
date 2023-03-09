@@ -1,19 +1,40 @@
 services:
   nginx:
-    build:  /nginx/Dockerfile
-    ports:  "443:443"
-    restart:  on_failure
+    container_name: nginx
+    build: ./nginx/ 
+    env_file: .env
+    ports:
+      - "443:443"
+    restart: on_failure
+    depends_on:
+      - wordpress
+    volumes:
+      - mariadb-data:/home/aweaver/data/mariadb
+      - wordpress-data:/home/aweaver/data/wordpress
 
   mariadb:
-    build:  /nginx/Dockerfile
-    volumes: mariadb_data:/home/aweaver/data/mariadb
+    container_name: mariadb
+    build: ./mariadb/
+    env_file: .env
+    volumes:
+      - mariadb-data:/home/aweaver/data/mariadb
+      - wordpress-data:/home/aweaver/data/wordpress
     restart: on_failure
-    depends_on: nginx
+    depends_on:
+      - nginx
 
   wordpress:
-    build:  /nginx/Dockerfile
-    volumes:  wordpress_data:/home/aweaver/data/wordpress
+    container_name: wordpress
+    build:  ./wordpress/
+    env_file: .env
+    volumes:
+      - mariadb-data:/home/aweaver/data/mariadb
+      - wordpress-data:/home/aweaver/data/wordpress
     restart:  on_failure
     depends_on:
       - nginx
       - mariadb
+
+volumes:
+  mariadb-data:
+  wordpress-data:
