@@ -5,11 +5,8 @@ services:
     env_file: .env
     ports:
       - "443:443"
-    restart: on_failure
-    depends_on:
-      - wordpress
+    restart: on-failure
     volumes:
-      - mariadb-data:/home/aweaver/data/mariadb
       - wordpress-data:/home/aweaver/data/wordpress
 
   mariadb:
@@ -18,8 +15,7 @@ services:
     env_file: .env
     volumes:
       - mariadb-data:/home/aweaver/data/mariadb
-      - wordpress-data:/home/aweaver/data/wordpress
-    restart: on_failure
+    restart: on-failure
     depends_on:
       - nginx
 
@@ -28,11 +24,9 @@ services:
     build:  ./wordpress/
     env_file: .env
     volumes:
-      - mariadb-data:/home/aweaver/data/mariadb
       - wordpress-data:/home/aweaver/data/wordpress
-    restart:  on_failure
+    restart:  on-failure
     depends_on:
-      - nginx
       - mariadb
 
 volumes:
