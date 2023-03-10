@@ -21,7 +21,5 @@ RUN apk add pwgen\
 && echo "define('LOGGED_IN_SALT', '`pwgen -sy 64 1`');" >> /etc/var/www/wordpress/wp-config.php\
 && echo "define('NONCE_SALT', '`pwgen -sy 64 1`');" >> /etc/var/www/wordpress/wp-config.php
 
-
-RUN chown -R www-data /etc/var/www/wordpress/
-
-ENTRYPOINT ["/usr/sbin/php-fpm"] 
+ENTRYPOINT ["/usr/sbin/php-fpm81"] 
+CMD ["-F", "-R"]
