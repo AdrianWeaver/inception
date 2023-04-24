@@ -19,7 +19,12 @@ RUN apk add pwgen\
 && echo "define('AUTH_SALT', '`pwgen -sy 64 1`');" >> /etc/var/www/wordpress/wp-config.php\
 && echo "define('SECURE_AUTH_SALT', '`pwgen -sy 64 1`');" >> /etc/var/www/wordpress/wp-config.php\
 && echo "define('LOGGED_IN_SALT', '`pwgen -sy 64 1`');" >> /etc/var/www/wordpress/wp-config.php\
-&& echo "define('NONCE_SALT', '`pwgen -sy 64 1`');" >> /etc/var/www/wordpress/wp-config.php
+&& echo "define('NONCE_SALT', '`pwgen -sy 64 1`');" >> /etc/var/www/wordpress/wp-config.php\
+&& echo "define( 'WP_DEBUG', false );" >> /etc/var/www/wordpress/wp-config.php\
+&& echo "if ( ! defined( 'ABSPATH' ) ) {" >> /etc/var/www/wordpress/wp-config.php\
+&& echo "	define( 'ABSPATH', __DIR__ . '/' );" >> /etc/var/www/wordpress/wp-config.php\
+&& echo "}" >> /etc/var/www/wordpress/wp-config.php\
+&& echo "require_once ABSPATH . 'wp-settings.php';" >> /etc/var/www/wordpress/wp-config.php
 
 ENTRYPOINT ["/usr/sbin/php-fpm81"] 
 CMD ["-F", "-R"]
