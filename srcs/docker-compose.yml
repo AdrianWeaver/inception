@@ -1,34 +1,69 @@
 services:
   nginx:
-    container_name: nginx
     build: ./nginx/ 
-    env_file: .env
+    image: nginx
+    env_file: 
+      - .env
     ports:
       - "443:443"
     restart: on-failure
+    networks:
+      - inception
     volumes:
-      - wordpress-data:/home/aweaver/data/wordpress
+      - wordpress-data:/var/www/wordpress
 
   mariadb:
     container_name: mariadb
+    image: mariadb
     build: ./mariadb/
-    env_file: .env
+    env_file: 
+      - .env
+    networks:
+      - inception
     volumes:
-      - mariadb-data:/home/aweaver/data/mariadb
+      - mariadb-data:/var/lib/mysql
     restart: on-failure
     depends_on:
       - nginx
+    expose:
+      - "3306"
 
   wordpress:
     container_name: wordpress
+    image: wordpress
     build:  ./wordpress/
-    env_file: .env
+    env_file: 
+      - .env
+    networks:
+      - inception
     volumes:
-      - wordpress-data:/home/aweaver/data/wordpress
+      - wordpress-data:/var/www/wordpress
     restart:  on-failure
     depends_on:
       - mariadb
+    expose:
+      - "9000"
 
 volumes:
   mariadb-data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: /home/aweaver/data/mariadb-data
   wordpress-data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: /home/aweaver/data/wordpress-data
+  nginx-data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: /home/aweaver/data/wordpress-data
+
+networks:
+  inception:
+    driver: bridge
