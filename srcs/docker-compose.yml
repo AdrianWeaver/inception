@@ -1,48 +1,50 @@
 services:
   nginx:
+    container_name: nginx
     build: ./nginx/ 
     image: nginx
     env_file: 
       - .env
+    networks:
+      - inception
     ports:
       - "443:443"
     restart: on-failure
-    networks:
-      - inception
     volumes:
-      - wordpress-data:/var/www/wordpress
+      - wordpress-data:/var/www/html/wordpress
 
   mariadb:
     container_name: mariadb
-    image: mariadb
     build: ./mariadb/
+    image: mariadb
     env_file: 
       - .env
     networks:
       - inception
+    expose:
+      - "3306"
     volumes:
       - mariadb-data:/var/lib/mysql
     restart: on-failure
     depends_on:
       - nginx
-    expose:
-      - "3306"
 
   wordpress:
     container_name: wordpress
+    build:  
+      context: ./wordpress/
     image: wordpress
-    build:  ./wordpress/
     env_file: 
       - .env
     networks:
       - inception
+    expose:
+      - "9000"
     volumes:
-      - wordpress-data:/var/www/wordpress
+      - wordpress-data:/var/www/html/wordpress
     restart:  on-failure
     depends_on:
       - mariadb
-    expose:
-      - "9000"
 
 volumes:
   mariadb-data:

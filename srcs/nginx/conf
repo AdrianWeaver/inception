@@ -2,7 +2,7 @@ server {
         listen 443 ssl;
         listen [::]:443 ssl;
 
-        root /var/www/wordpress;
+        root /var/www/html/wordpress;
 	index index.php index.html index.htm;
         server_name $NGINX_HOST;
 
