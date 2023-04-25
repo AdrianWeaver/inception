@@ -8,23 +8,23 @@ RUN apk -U upgrade\
 && tar -xvf latest.tar.gz -C /var/www\
 && rm -rf latest.tar.gz
 
-ADD wp-config.php /etc/var/www/wordpress/
+ADD wp-config.php /var/www/wordpress/
 
 #create salts for wp-config
 RUN apk add pwgen
-RUN echo "define('AUTH_KEY', '`pwgen -syr \\\\\'\\"'\`' 64 1`');" >> /etc/var/www/wordpress/wp-config.php && \
-	echo "define('SECURE_AUTH_KEY', '`pwgen -syr \\\\\'\\"'\`' 64 1`');" >> /etc/var/www/wordpress/wp-config.php && \
-	echo "define('LOGGED_IN_KEY', '`pwgen -syr \\\\\'\\"'\`' 64 1`');" >> /etc/var/www/wordpress/wp-config.php && \
-	echo "define('NONCE_KEY', '`pwgen -syr \\\\\'\\"'\`' 64 1`');" >> /etc/var/www/wordpress/wp-config.php && \
-	echo "define('AUTH_SALT', '`pwgen -syr \\\\\'\\"'\`' 64 1`');" >> /etc/var/www/wordpress/wp-config.php && \
-	echo "define('SECURE_AUTH_SALT', '`pwgen -syr \\\\\'\\"'\`' 64 1`');" >> /etc/var/www/wordpress/wp-config.php && \
-	echo "define('LOGGED_IN_SALT', '`pwgen -syr \\\\\'\\"'\`' 64 1`');" >> /etc/var/www/wordpress/wp-config.php && \
-	echo "define('NONCE_SALT', '`pwgen -syr \\\\\'\\"'\`' 64 1`');" >> /etc/var/www/wordpress/wp-config.php && \
-	echo "define( 'WP_DEBUG', false );" >> /etc/var/www/wordpress/wp-config.php && \
-	echo "if ( ! defined( 'ABSPATH' ) ) {" >> /etc/var/www/wordpress/wp-config.php && \
-	echo "	define( 'ABSPATH', __DIR__ . '/' );" >> /etc/var/www/wordpress/wp-config.php && \
-	echo "}" >> /etc/var/www/wordpress/wp-config.php && \
-	echo "require_once ABSPATH . 'wp-settings.php';" >> /etc/var/www/wordpress/wp-config.php
+RUN echo "define('AUTH_KEY', '`pwgen -syr \\\\\'\\"'\`' 64 1`');" >> /var/www/wordpress/wp-config.php && \
+	echo "define('SECURE_AUTH_KEY', '`pwgen -syr \\\\\'\\"'\`' 64 1`');" >> /var/www/wordpress/wp-config.php && \
+	echo "define('LOGGED_IN_KEY', '`pwgen -syr \\\\\'\\"'\`' 64 1`');" >> /var/www/wordpress/wp-config.php && \
+	echo "define('NONCE_KEY', '`pwgen -syr \\\\\'\\"'\`' 64 1`');" >> /var/www/wordpress/wp-config.php && \
+	echo "define('AUTH_SALT', '`pwgen -syr \\\\\'\\"'\`' 64 1`');" >> /var/www/wordpress/wp-config.php && \
+	echo "define('SECURE_AUTH_SALT', '`pwgen -syr \\\\\'\\"'\`' 64 1`');" >> /var/www/wordpress/wp-config.php && \
+	echo "define('LOGGED_IN_SALT', '`pwgen -syr \\\\\'\\"'\`' 64 1`');" >> /var/www/wordpress/wp-config.php && \
+	echo "define('NONCE_SALT', '`pwgen -syr \\\\\'\\"'\`' 64 1`');" >> /var/www/wordpress/wp-config.php && \
+	echo "define( 'WP_DEBUG', false );" >> /var/www/wordpress/wp-config.php && \
+	echo "if ( ! defined( 'ABSPATH' ) ) {" >> /var/www/wordpress/wp-config.php && \
+	echo "	define( 'ABSPATH', __DIR__ . '/' );" >> /var/www/wordpress/wp-config.php && \
+	echo "}" >> /var/www/wordpress/wp-config.php && \
+	echo "require_once ABSPATH . 'wp-settings.php';" >> /var/www/wordpress/wp-config.php
 
 
 ENTRYPOINT ["/usr/sbin/php-fpm81"] 
