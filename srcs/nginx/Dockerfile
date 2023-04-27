@@ -8,7 +8,7 @@ RUN apk -U update\
 && mkdir -p /etc/ssl/nginx \
 && mkdir -p /run/nginx/\
 && mkdir -p /var/www/wordpress\
-&& openssl dhparam -out /etc/ssl/nginx/dh4096.pem 2048\
+&& openssl dhparam -out /etc/ssl/nginx/dh2048.pem 2048\
 && openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt -subj "/C=FR/ST=Paris/L=Paris/0=42/OU=42 Paris/CN=$(NGINX_HOST)"
 
 COPY conf /etc/nginx/http.d/default.conf
