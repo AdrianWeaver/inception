@@ -1,9 +1,15 @@
 server {
-        listen 443 default_server;
-        listen [::]:443 default_server;
+        listen 443 ssl;
+        listen [::]:443 ssl;
 
-        root /var/www/;
-        server_name $(NGINX_HOST);
+        root /var/www/html/wordpress;
+	index index.php index.html index.htm;
+        server_name $NGINX_HOST;
+
+	ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt;
+	ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;
+	ssl_protocols	TLSv1.2 TLSv1.3;
+
 
         location /files {
                 autoindex on;
