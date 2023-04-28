@@ -59,12 +59,6 @@ volumes:
       type: 'none'
       o: 'bind'
       device: /home/aweaver/data/wordpress-data
-  nginx-data:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: /home/aweaver/data/wordpress-data
 
 networks:
   inception:
