@@ -12,6 +12,8 @@ services:
     restart: on-failure
     volumes:
       - wordpress-data:/var/www/html/wordpress
+    depends_on:
+      - wordpress
 
   mariadb:
     container_name: mariadb
@@ -26,8 +28,6 @@ services:
     volumes:
       - mariadb-data:/var/lib/mysql
     restart: on-failure
-    depends_on:
-      - nginx
 
   wordpress:
     container_name: wordpress
