@@ -2,16 +2,37 @@ server {
         listen 443 ssl;
         listen [::]:443 ssl;
 
+	# Specify the directory where the website is stored. usually ending with a directory with the name of the server
+	# Here keeping "wordpress" but this is not good practices as this is not really explicit for domain name or multiple websites hosting
         root /var/www/html/wordpress;
+	# Specifying which files to look for
 	index index.php index.html index.htm;
-        server_name $NGINX_HOST;
+	# this is the domain name stored in .env file
+        server_name aweaver.42.fr;
 
 	ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt;
 	ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;
 	ssl_protocols	TLSv1.2 TLSv1.3;
 
+	#matches any file asked for using regex
+	location ~ \.php$ {
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+		# specifying unix socket to handle request using php-fpm.
+		fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
+		# index.php could be renamed here to replace an index.php file if not in the directory
+		fastcgi_index index.php;
+		include fastcgi_params;
+		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+		fastcgi_intercept_errors off;
+		fastcgi_buffer_size 16k;
+		fastcgi_buffers 16 32k;
+		fastcgi_connect_timeout 120;
+		fastcgi_send_timeout 120;
+		fastcgi_read_timeout 120;
+	}
 
-        location /files {
-                autoindex on;
-        }
+	# all files not found default to 404 error
+   	location / {
+		try_files $uri $uri/ =404;
+   	}
 }
