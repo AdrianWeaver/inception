@@ -1,8 +1,8 @@
 FROM alpine:3.17.1
 
 RUN apk -U upgrade\
-&& apk add php\
-&& apk add php-fpm\
+&& apk add php81\
+&& apk add php81-fpm\
 && wget https://wordpress.org/latest.tar.gz\
 && mkdir -p /var/www/html\
 && tar -xvf latest.tar.gz -C /var/www/html\
