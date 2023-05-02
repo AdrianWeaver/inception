@@ -8,6 +8,8 @@ RUN apk -U upgrade\
 && tar -xvf latest.tar.gz -C /var/www/html\
 && rm -rf latest.tar.gz
 
+RUN sed -i 's/listen=127\.0\.0\.1:9000/listen=9000/' /etc/php81/php-fpm.d/www.conf
+
 ADD wp-config.php /var/www/html/wordpress/
 
 #create salts for wp-config
