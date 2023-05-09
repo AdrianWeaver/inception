@@ -1,6 +1,18 @@
+version: 2.17.2
 services:
+  adminer:
+    container_name: Adminer     # Name redirect to IP -> 172.X.X.Z
+    hostname: root
+    build: adminer/.  # Build the dockerfile in ./adminer_directory/Dockerfile 
+    restart: always             # Restart the container if it has stopped
+    ports:
+      - "80:80"                 # Redirect port 80 of Adminer on the host
+    networks:
+      - inception   
+
   nginx:
     container_name: nginx
+    hostname: root
     build: ./nginx/ 
     image: nginx
     env_file: 
@@ -17,6 +29,7 @@ services:
 
   mariadb:
     container_name: mariadb
+    hostname: root
     build: ./mariadb/
     image: mariadb
     env_file: 
@@ -27,10 +40,11 @@ services:
       - "3306"
     volumes:
       - mariadb-data:/var/lib/mysql
-    restart: on-failure
+    restart: always
 
   wordpress:
     container_name: wordpress
+    hostname: root
     build:  
       context: ./wordpress/
     image: wordpress
