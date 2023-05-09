@@ -5,9 +5,10 @@ server {
 	# Specify the directory where the website is stored. usually ending with a directory with the name of the server
 	# Here keeping "wordpress" but this is not good practices as this is not really explicit for domain name or multiple websites hosting
         root /var/www/html/wordpress;
+
 	# Specifying which files to look for
 	index index.php index.html index.htm;
-	# this is the domain name stored in .env file
+
         server_name aweaver.42.fr;
 
 	ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt;
