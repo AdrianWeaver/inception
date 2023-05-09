@@ -2,7 +2,7 @@ FROM alpine:3.17.1
 
 
 RUN apk -U upgrade &&\
-	add --no-cache nginx openssl &&\
+	apk add --no-cache nginx openssl &&\
 	mkdir -p /etc/ssl/nginx &&\
 	mkdir -p /run/nginx/ &&\
 	mkdir -p /var/www/html/wordpress &&\
@@ -12,10 +12,10 @@ RUN apk -U upgrade &&\
 COPY	conf /etc/nginx/http.d/default.conf
 COPY	nginx.conf /etc/nginx/nginx.conf
 
-RUN	adduser -D -g 'nginx' nginx &&\
-	chown -R nginx:nginx /run/nginx &&\
-	chown nginx:nginx /etc/ssl/nginx &&\
-	chown -R nginx:nginx /var/www/html/wordpress
+RUN	adduser -D -g 'www' www &&\
+	chown -R www:www /run/nginx &&\
+	chown www:www /etc/ssl/nginx &&\
+	chown -R www:www /var/www/html/wordpress
 
 ENTRYPOINT ["nginx"]
 CMD ["-g", "daemon off;"]

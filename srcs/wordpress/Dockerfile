@@ -28,6 +28,6 @@ RUN echo "define('AUTH_KEY', '`pwgen -syr \\\\\'\\"'\`' 64 1`');" >> /var/www/ht
 	echo "}" >> /var/www/html/wordpress/wp-config.php && \
 	echo "require_once ABSPATH . 'wp-settings.php';" >> /var/www/html/wordpress/wp-config.php
 
-RUN chown -R nginx:nginx /var/www/html/wordpress/
+#RUN	chown -R www:www /var/www/html/wordpress/
 
 ENTRYPOINT ["/usr/sbin/php-fpm81", "-F", "-R"] 
