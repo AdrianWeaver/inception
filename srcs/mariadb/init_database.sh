@@ -1,26 +1,17 @@
 #!/bin/sh
+service mysql start 
 
-mkdir -p /run/mysqld
-chown -R mysql:mysql /run/mysqld
-mysql_install_db --user=mysql --ldata=/var/lib/mysql > /dev/null
-chown -R mysql:mysql /var/lib/mysql
+echo "DROP DATABASE IF EXISTS test;" | mysql
+echo "CREATE DATABASE $DATABASE_NAME;" | mysql
 
-tfile=`mktemp`
-if [ ! -f "$tfile" ]; then
-    return 1
-fi
-cat << EOF > $tfile
-DROP DATABASE IF EXISTS test;
-FLUSH PRIVILEGES;
-CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
-CREATE USER IF NOT EXISTS '$MYSQL_ROOT_LOGIN'@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
-CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
-GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_ROOT_LOGIN'@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
-ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
-FLUSH PRIVILEGES;
-EOF
+echo "CREATE USER '$DATABASE_LOGIN'@'%' IDENTIFIED BY '$DATABASE_PASSWORD';" | mysql
+echo "GRANT ALL PRIVILEGES ON $DATABASE_NAME.* TO '$DATABASE_LOGIN'@'%' IDENTIFIED BY '$DATABASE_PASSWORD';" | mysql
+echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '$DATABASE_PASSWORD';" | mysql
+echo "FLUSH PRIVILEGES;" | mysql
 
-/usr/bin/mysqld --user=mysql --bootstrap --verbose=0 --skip-name-resolve --skip-networking=0 < $tfile
-rm -f $tfile
 
-exec /usr/bin/mysqld --user=mysql --console --skip-name-resolve --skip-networking=0
+kill $(cat /var/run/mysqld/mysqld.pid)
+
+mysqld
+
+
