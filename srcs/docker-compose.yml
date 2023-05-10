@@ -14,7 +14,7 @@ services:
     container_name: nginx
     hostname: root
     build: ./nginx/ 
-    image: nginx
+    image: nginx:aweaver
     env_file: 
       - .env
     networks:
@@ -31,7 +31,7 @@ services:
     container_name: mariadb
     hostname: root
     build: ./mariadb/
-    image: mariadb
+    image: mariadb:aweaver
     env_file: 
       - .env
     networks:
@@ -47,7 +47,7 @@ services:
     hostname: root
     build:  
       context: ./wordpress/
-    image: wordpress
+    image: wordpress:aweaver
     env_file: 
       - .env
     networks:
