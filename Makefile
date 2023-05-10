@@ -25,10 +25,10 @@ run:	build
 
 clean: down
 	sudo docker system prune -af
-	sudo docker volume rm $(sudo docker volume ls -q) 2>/dev/null
+	-$(sudo docker volume rm -f $(sudo docker volume ls -q) 2>/dev/null)
 	sudo rm -rf /home/aweaver/data/*
 
 re:	clean
-	all
+	make all
 
 .PHONY: all build up down run nginx mariadb wordpress clean re 
