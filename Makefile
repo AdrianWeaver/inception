@@ -6,22 +6,29 @@ SRC_NGINX = srcs/nginx/Dockerfile
 SRC_MARIADB = srcs/mariadb/Dockerfile
 SRC_WORDPRESS = srcs/wordpress/Dockerfile
 
-all:	compose
+all:	up
 
-compose: $(NGINX) $(MARIADB) $(WORDPRESS) $(RUN)
-	docker-compose up -p inception -f srcs/docker-compose.yml	
+up:	build
+	sudo docker --log-level WARNING compose -f srcs/docker-compose.yml up
+
+down:	
+	sudo docker compose -f srcs/docker-compose.yml down
+
+build:
+	sudo mkdir -p /home/aweaver/data/mariadb-data
+	sudo mkdir -p /home/aweaver/data/wordpress-data
+	sudo docker --log-level WARNING compose -f srcs/docker-compose.yml build
 	
 
-$(RUN):
+run:	build
 	sudo docker-compose run
 
-NGINX:		$(SRC_NGINX)
-	sudo docker build -f $(SRC_NGINX) --no-cache -t $(NGINX):latest .
+clean: down
+	sudo docker system prune -af
+	sudo docker volume rm $(sudo docker volume ls -q) 2>/dev/null
+	sudo rm -rf /home/aweaver/data/*
 
-MARIADB:	$(SRC_MARIADB)
-	sudo docker build -f $(SRC_MARIADB) --no-cache -t $(MARIADB):latest .
+re:	clean
+	all
 
-WORDPRESS:	$(SRC_WORDPRESS)
-	sudo docker build -f $(SRC_WORDPRESS) --no-cache -t $(WORDPRESS):latest .
-
-
+.PHONY: all build up down run nginx mariadb wordpress clean re 
