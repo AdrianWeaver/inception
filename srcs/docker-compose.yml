@@ -40,7 +40,12 @@ services:
       - "3306"
     volumes:
       - mariadb-data:/var/lib/mysql
-    restart: always
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "mysql", "-u", "${DATABASE_LOGIN}", "-p${DATABASE_PASSWORD}"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
   wordpress:
     container_name: wordpress
@@ -58,7 +63,8 @@ services:
       - wordpress-data:/var/www/html/wordpress
     restart:  on-failure
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
 
 volumes:
   mariadb-data:
