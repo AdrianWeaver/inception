@@ -12,6 +12,6 @@ echo "FLUSH PRIVILEGES;" | mysql
 
 kill $(cat /var/run/mysqld/mysqld.pid)
 
-mysqld
+exec mysqld
 
 
